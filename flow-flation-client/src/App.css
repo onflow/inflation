@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "Patrick Hand";
+  src: url("../public/PatrickHand-Regular.ttf") format("truetype");
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  background-image: url("../public/clouds_2.jpg");
+  background-repeat: repeat;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: "Patrick Hand", cursive, sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Subtle black shadow */
+  color: #333; /* Darker text color for better visibility */
+  font-weight: bold; /* If the font supports different weights, you can try using bold */
+}
+
+@keyframes anim {
+  25% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+}
