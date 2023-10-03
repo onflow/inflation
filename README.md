@@ -13,7 +13,7 @@ Flow Flation is a demonstrative game designed for the Flow blockchain, highlight
 - Once content with their balloon's state, players can mint it into a non-fungible token (NFT).
 - Players can then visualize their collection of balloons.
 
-## Flow PWA Walletless Integration
+## Flow PWA Walletless Quickstart
 
 This section guides you through setting up a basic PWA and integrating walletless onboarding via Magic.
 
@@ -55,11 +55,11 @@ Incorporate the necessary libraries:
     
     export default magic;
     ```
-    The returned metaData contains user specifics such as address and email.
+    The returned metadata contains user specifics such as address and email.
 
     Magic offers other authentication avenues like SMS and Social. Explore the official documentation for a comprehensive list.
 
-5. Invoke Flow transactions using FCL (Flow Client Library):
+5. Invoke Flow transactions/scripts using FCL (Flow Client Library):
     ```
     import * as fcl from "@onflow/fcl";
     import magic from "../magic";
