@@ -36,7 +36,8 @@ This section guides you through setting up a basic PWA and integrating walletles
 Create an account at Magic and configure a dedicated application to obtain an API key.
 Incorporate the necessary libraries:
     ```bash
-    yarn add magic-sdk @magic-ext/flow
+    yarn add magic-sdk @magic-ext/flow @onflow/fcl
+
     ```
 	
     Initialize the Magic instance for Flow:
