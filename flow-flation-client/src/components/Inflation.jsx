@@ -11,6 +11,7 @@ const BalloonGame = () => {
   const [inflateInterval, setInflateInterval] = useState(null);
   const [isMinting, setIsMinting] = useState(false);
   const [alertVisible, setAlertVisible] = useState(true);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const stopInflating = useCallback(() => {
     if (inflateInterval) {
@@ -25,12 +26,23 @@ const BalloonGame = () => {
     setIsGameOver(false);
     setTimer(30);
     setPopThreshold(Math.random() * 50 + 50);
+    setHasStarted(false);
   }, [stopInflating]);
 
   const startInflating = () => {
     if (isGameOver) {
       return;
     }
+
+    if (!hasStarted) {
+      setHasStarted(true);
+      let interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+
+      setInflateInterval(interval);
+    }
+
     if (!inflateInterval) {
       const interval = setInterval(() => {
         setInflation((prevInflation) => prevInflation + 1);
@@ -38,16 +50,6 @@ const BalloonGame = () => {
       setInflateInterval(interval);
     }
   };
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     if (timer <= 0) {
@@ -159,8 +161,10 @@ const BalloonGame = () => {
           <>
             1. Tap balloon to start game.
             <br />
+            <br />
             2. Press-and-hold (long press) to inflate your balloon and increase
             score.
+            <br />
             <br />
             3. Tap 'End and Mint' to mint balloon to your collection before time
             runs out or balloon pops!
