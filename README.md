@@ -90,3 +90,5 @@ Incorporate the necessary libraries:
     ]);
     const transactionData = await fcl.tx(response).onceSealed();
 
+TODO Wallet Connect and Account Linking Instructions...
+
