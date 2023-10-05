@@ -11,12 +11,17 @@ export default function LogIn() {
   const { setCurrentUser } = useContext(CurrentUserContext);
 
   const login = async () => {
-    await magic.auth.loginWithMagicLink({
+    if(phoneNumber == null || phoneNumber === "") {
+      return;
+    }
+    
+    await magic.auth.loginWithSMS({ phoneNumber });
+       /*await magic.auth.loginWithMagicLink({
       email: "bilal.shahid+3@dapperlabs.com",
-    });
+    });*/
+    
     const metaData = await magic.user.getMetadata();
     setCurrentUser(metaData);
-    //await magic.auth.loginWithSMS({ phoneNumber });
   };
 
   return (
