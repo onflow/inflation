@@ -4,9 +4,33 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import CurrentUserProvider from "./context/currentUserProvider";
+import { init } from "@onflow/fcl-wc";
 import * as fcl from "@onflow/fcl";
 
-fcl.config().put("accessNode.api", "https://rest-testnet.onflow.org");
+fcl.config({
+  "flow.network": "testnet",
+  "accessNode.api": "https://rest-testnet.onflow.org",
+  "discovery.wallet": `https://fcl-discovery.onflow.org/testnet/authn`,
+});
+
+const WALLET_CONNECT_PROJECT_ID =
+  process.env.REACT_APP_WALLETCONNECT_PROJECT_ID;
+
+init({
+  projectId: WALLET_CONNECT_PROJECT_ID,
+  metadata: {
+    name: "Flow Flation",
+    description: "The best Flow blockchain educational resource of all time.",
+    url: "https://flow-flation.vercel.app/",
+    icons: ["https://cryptologos.cc/logos/flow-flow-logo.png"],
+  },
+  includeBaseWC: true,
+  wallets: [],
+  wcRequestHook: null,
+  pairingModalOverride: null,
+}).then(({ FclWcServicePlugin }) => {
+  fcl.pluginRegistry.add(FclWcServicePlugin);
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

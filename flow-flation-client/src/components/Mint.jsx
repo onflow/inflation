@@ -150,7 +150,7 @@ export default function Mint({ rgbColor, inflation, onReset }) {
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading || userStatusLoading}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress style={{ color: "#49EF8B" }} />
       </Backdrop>
     </Container>
   );

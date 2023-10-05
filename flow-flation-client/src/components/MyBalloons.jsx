@@ -80,7 +80,7 @@ export default function MyBalloons() {
 
   const gridStyle = {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", // You can adjust the sizing as needed
+    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
     gap: "20px",
     padding: "20px",
   };
@@ -108,7 +108,7 @@ export default function MyBalloons() {
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading || userStatusLoading}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress style={{ color: "#49EF8B" }} />
       </Backdrop>
     </Box>
   );

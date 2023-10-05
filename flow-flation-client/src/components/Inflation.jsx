@@ -63,11 +63,10 @@ const BalloonGame = () => {
   const getBalloonColor = (inflation, threshold, alpha) => {
     const percentageInflated = inflation / threshold;
 
-    // Define the colors
     const red = [220, 20, 60];
     const bronze = [128, 0, 0];
     const violet = [138, 43, 226];
-    const gold = [218, 165, 32]; // Adjusted gold color
+    const gold = [218, 165, 32];
 
     let color;
 

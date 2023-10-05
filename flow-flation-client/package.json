@@ -9,6 +9,7 @@
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
     "@onflow/fcl": "^1.6.0",
+    "@onflow/fcl-wc": "^4.0.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.5.0",
