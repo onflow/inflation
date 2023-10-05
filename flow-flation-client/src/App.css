@@ -25,6 +25,11 @@ select {
   font-weight: bold; /* If the font supports different weights, you can try using bold */
 }
 
+wcm-modal {
+  position: relative; /* or absolute, fixed, or sticky, depending on the desired behavior */
+  z-index: 9999; /* high z-index to bring it to the front */
+}
+
 @keyframes anim {
   25% {
     transform: rotate(-2deg);

@@ -52,7 +52,10 @@ function LinkAccountModal({ open, setOpen }) {
   const [removingParents, setRemovingParents] = useState([]);
 
   const [parents, setParents] = useState([]);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setIsLoading(false);
+    setOpen(false);
+  };
   const { currentUser } = useContext(CurrentUserContext);
 
   useEffect(() => {
