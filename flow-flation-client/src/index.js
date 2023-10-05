@@ -38,7 +38,7 @@ root.render(
   <React.StrictMode>
     <CurrentUserProvider>
       <PWAPrompt
-        promptOnVisit={1}
+        promptOnVisit={3}
         copyClosePrompt="Close"
         permanentlyHideOnDismiss={false}
       />
