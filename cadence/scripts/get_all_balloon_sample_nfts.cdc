@@ -1,5 +1,4 @@
 import BalloonSampleNFT from "../contracts/BalloonSampleNFT.cdc"
-
 pub struct NFT {
     pub let id: UInt64
     pub let name: String
@@ -24,13 +23,17 @@ pub fun main(address: Address): [NFT] {
     let collection = account
         .getCapability(BalloonSampleNFT.CollectionPublicPath)
         .borrow<&{BalloonSampleNFT.BalloonSampleNFTCollectionPublic}>()
-        ?? panic("Could not borrow a reference to the collection")
+
+    if collection == nil {
+        return []
+    }
+
     
-    let ids = collection.getIDs()
+    let ids = collection!.getIDs()
     let toReturn : [NFT] = []
 
     for id in ids {
-        let nft = collection.borrowBalloonSampleNFT(id: id)!
+        let nft = collection!.borrowBalloonSampleNFT(id: id)!
 
         toReturn.append(NFT(
             id: id,
