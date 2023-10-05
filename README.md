@@ -1,6 +1,6 @@
-# Flow Flation: Walletless PWA on Flow
+# Flation: Walletless PWA on Flow
 
-Flow Flation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
+Flation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
 
 [**Live Demo**](https://flow-flation.vercel.app/): Visit and install it as a PWA shortcut on your mobile device.
 

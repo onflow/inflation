@@ -17,6 +17,7 @@
     "mui-tel-input": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-ios-pwa-prompt": "^1.8.4",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "serve": "^14.2.1",

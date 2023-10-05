@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import CurrentUserProvider from "./context/currentUserProvider";
 import { init } from "@onflow/fcl-wc";
 import * as fcl from "@onflow/fcl";
+import PWAPrompt from "react-ios-pwa-prompt";
 
 fcl.config({
   "flow.network": "testnet",
@@ -19,7 +20,7 @@ const WALLET_CONNECT_PROJECT_ID =
 init({
   projectId: WALLET_CONNECT_PROJECT_ID,
   metadata: {
-    name: "Flow Flation",
+    name: "Flation",
     description: "The best Flow blockchain educational resource of all time.",
     url: "https://flow-flation.vercel.app/",
     icons: ["https://cryptologos.cc/logos/flow-flow-logo.png"],
@@ -36,6 +37,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <CurrentUserProvider>
+      <PWAPrompt
+        promptOnVisit={1}
+        copyClosePrompt="Close"
+        permanentlyHideOnDismiss={false}
+      />
       <App />
     </CurrentUserProvider>
   </React.StrictMode>

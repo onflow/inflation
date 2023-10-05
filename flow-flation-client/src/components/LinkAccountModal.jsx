@@ -35,9 +35,12 @@ const getParentAccounts = async (childAccountAddress) => {
     pub fun main(child: Address): [Address] {
         let acct = getAuthAccount(child)
         let o = acct.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
-            ?? panic("owned account not found")
+
+        if o == nil {
+          return []
+        }
     
-        return o.getParentStatuses().keys
+        return o!.getParentStatuses().keys
     }   
     `,
     args: (arg, t) => [arg(childAccountAddress, t.Address)],

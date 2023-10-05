@@ -20,14 +20,56 @@ input,
 textarea,
 select {
   font-family: "Patrick Hand", cursive, sans-serif;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Subtle black shadow */
-  color: #333; /* Darker text color for better visibility */
-  font-weight: bold; /* If the font supports different weights, you can try using bold */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  color: #333;
+  font-weight: bold;
 }
 
 wcm-modal {
-  position: relative; /* or absolute, fixed, or sticky, depending on the desired behavior */
-  z-index: 9999; /* high z-index to bring it to the front */
+  position: relative;
+  z-index: 9999;
+}
+
+.ios-alert {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 270px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.ios-alert-header {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.ios-alert-body {
+  font-size: 13px;
+  margin-bottom: 20px;
+  line-height: 2;
+  white-space: pre-line;
+}
+
+.ios-alert-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ios-alert-button {
+  padding: 10px 15px;
+  font-size: 17px;
+  border: none;
+  background-color: transparent;
+  color: green;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-left: 5px;
 }
 
 @keyframes anim {

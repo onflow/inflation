@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Mint from "./Mint";
 import Button from "./Button";
+import Alert from "./Alert";
 
 const BalloonGame = () => {
   const [inflation, setInflation] = useState(0);
@@ -9,6 +10,7 @@ const BalloonGame = () => {
   const [popThreshold, setPopThreshold] = useState(Math.random() * 50 + 50);
   const [inflateInterval, setInflateInterval] = useState(null);
   const [isMinting, setIsMinting] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(true);
 
   const stopInflating = useCallback(() => {
     if (inflateInterval) {
@@ -151,12 +153,30 @@ const BalloonGame = () => {
         msUserSelect: "none",
       }}
     >
+      <Alert
+        title="Instructions"
+        message={
+          <>
+            1. Tap balloon to start game.
+            <br />
+            2. Press-and-hold (long press) to inflate your balloon and increase
+            score.
+            <br />
+            3. Tap 'End and Mint' to mint balloon to your collection before time
+            runs out or balloon pops!
+          </>
+        }
+        onCancel={() => setAlertVisible(false)}
+        onConfirm={() => setAlertVisible(false)}
+        visible={alertVisible}
+      />
+
       <h2>Time Left: {timer > 0 ? timer : 0}</h2>
       <h2>Inflation Level: {inflation}</h2>
       {/*<h2>Pop Threshold: {Math.round(popThreshold)}</h2>*/}
       <div>
         {!isGameOver && (
-          <Button label="End Game" onClick={() => setIsMinting(true)} />
+          <Button label="End and Mint" onClick={() => setIsMinting(true)} />
         )}
       </div>
       <div id="balloonContainer" style={balloonStyle}>
