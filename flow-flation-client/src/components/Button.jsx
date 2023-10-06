@@ -1,11 +1,12 @@
 import React from "react";
 import { Button as MaterialButton } from "@mui/material";
 
-function Button({ label, onClick }) {
+function Button({ label, onClick, disabled=false }) {
   return (
     <div>
       <MaterialButton
         variant="contained"
+        disabled={disabled}
         sx={{
           background: "linear-gradient(45deg, #4CAF50 30%, #8BC34A 90%)",
           boxShadow: "0 3px 5px 2px rgba(139, 195, 74, .3)",

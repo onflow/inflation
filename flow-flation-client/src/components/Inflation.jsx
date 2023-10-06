@@ -9,6 +9,7 @@ const BalloonGame = () => {
   const [timer, setTimer] = useState(30);
   const [popThreshold, setPopThreshold] = useState(Math.random() * 50 + 50);
   const [inflateInterval, setInflateInterval] = useState(null);
+  const [timerInterval, setTimerInterval] = useState(null);
   const [isMinting, setIsMinting] = useState(false);
   const [alertVisible, setAlertVisible] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
@@ -22,12 +23,18 @@ const BalloonGame = () => {
 
   const restartGame = useCallback(() => {
     stopInflating();
+
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+    }
+
     setInflation(0);
     setIsGameOver(false);
     setTimer(30);
     setPopThreshold(Math.random() * 50 + 50);
     setHasStarted(false);
-  }, [stopInflating]);
+  }, [stopInflating, timerInterval]);
 
   const startInflating = () => {
     if (isGameOver) {
@@ -36,18 +43,18 @@ const BalloonGame = () => {
 
     if (!hasStarted) {
       setHasStarted(true);
-      let interval = setInterval(() => {
+
+      let timerInt = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-
-      setInflateInterval(interval);
+      setTimerInterval(timerInt);
     }
 
     if (!inflateInterval) {
-      const interval = setInterval(() => {
+      const inflationInt = setInterval(() => {
         setInflation((prevInflation) => prevInflation + 1);
       }, 100);
-      setInflateInterval(interval);
+      setInflateInterval(inflationInt);
     }
   };
 
@@ -180,7 +187,7 @@ const BalloonGame = () => {
       {/*<h2>Pop Threshold: {Math.round(popThreshold)}</h2>*/}
       <div>
         {!isGameOver && (
-          <Button label="End and Mint" onClick={() => setIsMinting(true)} />
+          <Button disabled={!hasStarted} label="End and Mint" onClick={() => setIsMinting(true)} />
         )}
       </div>
       <div id="balloonContainer" style={balloonStyle}>

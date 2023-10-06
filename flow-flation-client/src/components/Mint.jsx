@@ -13,6 +13,7 @@ import magic from "../magic";
 import CurrentUserContext from "../context/currentUserContext";
 import * as t from "@onflow/types";
 import BalloonNFTView from "./BalloonNFTView";
+import { useNavigate } from "react-router-dom";
 
 const AUTHORIZATION_FUNCTION = magic.flow.authorization;
 
@@ -20,6 +21,7 @@ export default function Mint({ rgbColor, inflation, onReset }) {
   const [loading, setLoading] = useState(false);
   const [minted, setMinted] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const { currentUser, setCurrentUser, userStatusLoading } =
     useContext(CurrentUserContext);
@@ -128,6 +130,10 @@ export default function Mint({ rgbColor, inflation, onReset }) {
           {minted ? (
             <Box mt={4}>
               <Typography>{message}</Typography>
+              <Button
+                label="View Your Balloons"
+                onClick={() => navigate("/my_balloons")}
+              />
               <Button label="Play Again" onClick={onReset} />
             </Box>
           ) : (
@@ -137,7 +143,7 @@ export default function Mint({ rgbColor, inflation, onReset }) {
                 <Button label="Mint" onClick={mint} />
               </Box>
               <Box mt={2}>
-                <Button label="Return to Game" onClick={onReset} />
+                <Button label="Play Again" onClick={onReset} />
               </Box>
             </>
           )}
