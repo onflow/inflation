@@ -1,98 +1,128 @@
-# Flation: Walletless PWA on Flow
+import React, { useState, useEffect, useContext } from "react";
+import Button from "./Button";
+import MaterialUIButton from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import CurrentUserContext from "../context/currentUserContext";
+import CircularProgress from "@mui/material/CircularProgress";
+import magic from "../magic";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
 
-Flation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%",
+  maxWidth: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  overflowY: "auto",
+  maxHeight: "90%",
+};
 
-[**Live Demo**](https://flow-flation.vercel.app/): Visit and install it as a PWA shortcut on your mobile device.
+const getParentAccounts = async (childAccountAddress) => {
+  const accounts = await fcl.query({
+    cadence: `
+    import HybridCustody from 0x294e44e1ec6993c6
 
-## Game Overview
+    pub fun main(child: Address): [Address] {
+        let acct = getAuthAccount(child)
+        let o = acct.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
 
-**Objective:** Inflate the balloon as much as possible without popping it.
-
-- As the balloon is inflated, it enlarges and undergoes color changes.
-- Players must be wary of an obscured inflation threshold. Exceeding this limit will burst the balloon.
-- Once content with their balloon's state, players can mint it into a non-fungible token (NFT).
-- Players can then visualize their collection of balloons.
-
-## Flow PWA Walletless Quickstart
-
-This section guides you through setting up a basic PWA and integrating walletless onboarding via Magic.
-
-### PWA Setup
-
-1. Create a new PWA application using the React template:
-   ```bash
-   npx create-react-app name-of-our-PWA-app --template cra-template-pwa
-
-2. In index.js, ensure that serviceWorkerRegistration.unregister(); is set to allow offline capabilities.
-
-3. Build and run the app:
-    ```bash
-    yarn run build
-    npx serve -s build
-    ```
-    **Tip:** To test on a mobile device, consider utilizing tools like ngrok.
-
-4. Magic Integration for Walletless Onboarding
-Create an account at Magic and configure a dedicated application to obtain an API key.
-Incorporate the necessary libraries:
-    ```bash
-    yarn add magic-sdk @magic-ext/flow @onflow/fcl
-    ```
-	
-    Initialize the Magic instance for Flow:
-    ```javscript
-    import { Magic } from "magic-sdk";
-    import { FlowExtension } from "@magic-ext/flow";
-    
-    const magic = new Magic(<Your_magic_app_key>, {
-      extensions: [
-        new FlowExtension({
-          rpcUrl: "https://rest-testnet.onflow.org",
-          network: "testnet",
-        }),
-      ],
-    });
-    
-    export default magic;
-    ```
-    The returned metadata contains user specifics such as address and email.
-
-    Magic offers other authentication avenues like SMS and Social. Explore the official documentation for a comprehensive list.
-
-5. Invoke Flow transactions/scripts using FCL (Flow Client Library):
-    ```javscript
-    import * as fcl from "@onflow/fcl";
-    import magic from "../magic";
-    
-    const AUTHORIZATION_FUNCTION = magic.flow.authorization;
-    
-    const response = await fcl.send([
-      fcl.transaction`
-        import NonFungibleToken from 0x631e88ae7f1d7c20
-    
-        transaction(recipient: Address) {
-          prepare(signer: AuthAccount) {
-            // transaction logic
-          }
-          execute {
-            // execution logic
-          }
+        if o == nil {
+          return []
         }
-      `,
-      fcl.args([
-        fcl.arg(currentUser.publicAddress, t.Address)
-      ]),
-      fcl.proposer(AUTHORIZATION_FUNCTION),
-      fcl.authorizations([AUTHORIZATION_FUNCTION]),
-      fcl.payer(AUTHORIZATION_FUNCTION),
-      fcl.limit(9999),
-    ]);
-    const transactionData = await fcl.tx(response).onceSealed();
+    
+        return o!.getParentStatuses().keys
+    }   
+    `,
+    args: (arg, t) => [arg(childAccountAddress, t.Address)],
+  });
+  return accounts;
+};
 
-### Account Linking Setup
-1. You can view the hybrid custody contracts [here](https://github.com/onflow/hybrid-custody)
-2. Invoke Cadence transaction to connect account
-    ```
+const AUTHORIZATION_FUNCTION = magic.flow.authorization;
+
+function LinkAccountModal({ open, setOpen }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [removingParents, setRemovingParents] = useState([]);
+
+  const [parents, setParents] = useState([]);
+  const handleClose = () => {
+    setIsLoading(false);
+    setOpen(false);
+  };
+  const { currentUser } = useContext(CurrentUserContext);
+
+  useEffect(() => {
+    const getParents = async () => {
+      setIsLoading(true);
+      if (currentUser != null) {
+        const res = await getParentAccounts(currentUser.publicAddress);
+        setParents(res);
+      }
+      setIsLoading(false);
+    };
+    if (currentUser != null) {
+      getParents();
+    }
+  }, [currentUser]);
+
+  async function handleRemove(account) {
+    try {
+      setRemovingParents((prevParents) => [...prevParents, account]);
+      var response = await fcl.send([
+        fcl.transaction`
+        import HybridCustody from 0x294e44e1ec6993c6
+        
+        transaction(parent: Address) {
+            prepare(acct: AuthAccount) {
+                let owned = acct.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
+                    ?? panic("owned not found")
+        
+                owned.removeParent(parent: parent)
+        
+                let manager = getAccount(parent).getCapability<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.ManagerPublicPath)
+                    .borrow() ?? panic("manager not found")
+                let children = manager.getChildAddresses()
+                assert(!children.contains(acct.address), message: "removed child is still in manager resource")
+            }
+        }
+        `,
+        fcl.args([fcl.arg(account, t.Address)]),
+        fcl.proposer(AUTHORIZATION_FUNCTION),
+        fcl.authorizations([AUTHORIZATION_FUNCTION]),
+        fcl.payer(AUTHORIZATION_FUNCTION),
+        fcl.limit(9999),
+      ]);
+
+      await fcl.tx(response).onceSealed();
+    } catch (error) {
+      console.error("FAILED TRANSACTION", error);
+    }
+    setRemovingParents((prevParents) =>
+      prevParents.filter((parent) => parent !== account)
+    );
+    const res = await getParentAccounts(currentUser.publicAddress);
+    setParents(res);
+  }
+
+  async function handleConfirm() {
+    setIsLoading(true);
+    fcl.unauthenticate();
+
+    const parentAuthz = fcl.currentUser().authorization;
+    const childAuthz = AUTHORIZATION_FUNCTION;
+    try {
+      const response = await fcl.mutate({
+        cadence: `
           #allowAccountLinking
   
           import HybridCustody from 0x294e44e1ec6993c6
@@ -165,104 +195,84 @@ Incorporate the necessary libraries:
                   manager.addAccount(cap: cap)
               }
           }
-    ```
-**Note:** For the sake of this example, well use some pre defiend factory and filter implementations. You can find them on the repo but on testnet we can use 0x1055970ee34ef4dc and 0xe2664be06bb0fe62 for the factory and filter address respecrtively. 0x1055970ee34ef4dc provides NFT capablities and 0xe2664be06bb0fe62 which is the AllowAllFilter. These generalized implementations likely cover most use cases, but you'll want to weigh the decision to use them according to your risk tolerance and specific scenario
-
-3. You could call this like so
-    ```javscript
-        const parentAuthz = fcl.currentUser().authorization;
-        const childAuthz = AUTHORIZATION_FUNCTION;
-        try {
-          const response = await fcl.mutate({
-            cadence: `
-               <INSERT_TRANSACTION_HERE>
-              `,
-            limit: 9999,
-            payer: parentAuthz,
-            proposer: parentAuthz,
-            authorizations: [childAuthz, parentAuthz],
-            args: (arg, t) => [
-              arg(null, t.Optional(t.Address)),
-              arg("0x1055970ee34ef4dc", t.Address),
-              arg("0xe2664be06bb0fe62", t.Address),
-            ],
-          });
-          await fcl.tx(response).onceSealed();
-    ```
-
-4. Now in order for you to grab all parent accounts linked to the child magic account you can do the following
-    ```
-        import HybridCustody from 0x294e44e1ec6993c6
-
-        pub fun main(child: Address): [Address] {
-            let acct = getAuthAccount(child)
-            let o = acct.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
-
-            if o == nil {
-              return []
-            }
-
-            return o!.getParentStatuses().keys
-        }  
-    ```
-5. And finally to remove a linked account you can run a transaction like so
-    ```javascript
-        await fcl.send([
-            fcl.transaction`
-            import HybridCustody from 0x294e44e1ec6993c6
-
-            transaction(parent: Address) {
-                prepare(acct: AuthAccount) {
-                    let owned = acct.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
-                        ?? panic("owned not found")
-
-                    owned.removeParent(parent: parent)
-
-                    let manager = getAccount(parent).getCapability<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.ManagerPublicPath)
-                        .borrow() ?? panic("manager not found")
-                    let children = manager.getChildAddresses()
-                    assert(!children.contains(acct.address), message: "removed child is still in manager resource")
-                }
-            }
-            `,
-            fcl.args([fcl.arg(account, t.Address)]),
-            fcl.proposer(AUTHORIZATION_FUNCTION),
-            fcl.authorizations([AUTHORIZATION_FUNCTION]),
-            fcl.payer(AUTHORIZATION_FUNCTION),
-            fcl.limit(9999),
-          ]);
-	```
-
-
-
-### Wallet Connect Setup
-
-1. Create an ccount on walletconnect.com and create a project
-2. You will be given a Project ID
-3. Install @onflow/fcl-wc
-     ```bash
-    yarn add @onflow/fcl-wc
-4. Init WalletConnect wherever you are initiating fcl
-   ```javscript
-   import { init } from "@onflow/fcl-wc";
-
-      const WALLET_CONNECT_PROJECT_ID =
-        process.env.REACT_APP_WALLETCONNECT_PROJECT_ID;
-
-      init({
-        projectId: WALLET_CONNECT_PROJECT_ID,
-        metadata: {
-          name: "Flation",
-          description: "The best Flow blockchain educational resource of all time.",
-          url: "https://flow-flation.vercel.app/",
-          icons: ["https://cryptologos.cc/logos/flow-flow-logo.png"],
-        },
-        includeBaseWC: true,
-        wallets: [],
-        wcRequestHook: null,
-        pairingModalOverride: null,
-      }).then(({ FclWcServicePlugin }) => {
-        fcl.pluginRegistry.add(FclWcServicePlugin);
+          `,
+        limit: 9999,
+        payer: parentAuthz,
+        proposer: parentAuthz,
+        authorizations: [childAuthz, parentAuthz],
+        args: (arg, t) => [
+          arg(null, t.Optional(t.Address)),
+          arg("0x1055970ee34ef4dc", t.Address),
+          arg("0xe2664be06bb0fe62", t.Address),
+        ],
       });
-    ```
+      await fcl.tx(response).onceSealed();
+    } catch (error) {
+      console.error("FAILED TRANSACTION", error);
+    }
 
+    const res = await getParentAccounts(currentUser.publicAddress);
+    setParents(res);
+    setIsLoading(false);
+  }
+
+  return (
+    <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Box sx={style}>
+          <IconButton
+            edge="end"
+            onClick={handleClose}
+            aria-label="close"
+            sx={{ position: "absolute", right: 12, top: 8 }}
+            style={{ color: "#49EF8B" }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <Typography id="simple-modal-title" variant="h6" component="h2">
+            Link a Parent Account
+          </Typography>
+
+          {parents.map((parent, index) => (
+            <Box
+              key={index}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mt={2}
+            >
+              <Typography style={{ marginRight: "16px" }}>{parent}</Typography>{" "}
+              {removingParents.includes(parent) ? (
+                <CircularProgress size={24} style={{ color: "#49EF8B" }} />
+              ) : (
+                <Button
+                  label="Remove Link"
+                  onClick={() => handleRemove(parent)}
+                />
+              )}
+            </Box>
+          ))}
+
+          <Box mt={2} display="flex" justifyContent="flex-end">
+            <MaterialUIButton onClick={handleClose} sx={{ mr: 2 }}>
+              Cancel
+            </MaterialUIButton>
+            {isLoading ? (
+              <CircularProgress size={24} style={{ color: "#49EF8B" }} />
+            ) : (
+              <Button label="Link New Account" onClick={handleConfirm} />
+            )}
+          </Box>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+export default LinkAccountModal;
