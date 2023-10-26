@@ -2,7 +2,7 @@
 
 Flation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
 
-[**Live Demo**](https://flow-flation.vercel.app/): Visit and install it as a PWA shortcut on your mobile device.
+[**Live Demo**](https://flation.vercel.app/): Visit and install it as a PWA shortcut on your mobile device.
 
 ## Game Overview
 
