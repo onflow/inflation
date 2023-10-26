@@ -175,7 +175,7 @@ This section guides you through setting up account linking and WalletConnect.
               }
           }
 	```
-**Note:** For the sake of this example, well use some pre defiend factory and filter implementations. You can find them on the repo but on testnet we can use 0x1055970ee34ef4dc and 0xe2664be06bb0fe62 for the factory and filter address respecrtively. 0x1055970ee34ef4dc provides NFT capablities and 0xe2664be06bb0fe62 which is the AllowAllFilter. These generalized implementations likely cover most use cases, but you'll want to weigh the decision to use them according to your risk tolerance and specific scenario
+**Note:** For the sake of this example, well use some pre defined factory and filter implementations. You can find them on the repo but on testnet we can use 0x1055970ee34ef4dc and 0xe2664be06bb0fe62 for the factory and filter address respectively. 0x1055970ee34ef4dc provides NFT capabilities and 0xe2664be06bb0fe62 which is the AllowAllFilter. These generalized implementations likely cover most use cases, but you'll want to weigh the decision to use them according to your risk tolerance and specific scenario
 
 3. You could use this with FCL like so to connect a parent account do the child Magic account
 	```
