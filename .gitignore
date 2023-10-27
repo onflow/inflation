@@ -1,27 +1,27 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-flow-flation-client/node_modules
-flow-flation-client/.pnp
-flow-flation-client/.pnp.js
+flow-inflation-client/node_modules
+flow-inflation-client/.pnp
+flow-inflation-client/.pnp.js
 
 # testing
-flow-flation-client/coverage
+flow-inflation-client/coverage
 
 # production
-flow-flation-client/build
+flow-inflation-client/build
 
 # misc
-flow-flation-client/.DS_Store
-flow-flation-client/.env.local
-flow-flation-client/.env.development.local
-flow-flation-client/.env.test.local
-flow-flation-client/.env.production.local
-flow-flation-client/.env*
+flow-inflation-client/.DS_Store
+flow-inflation-client/.env.local
+flow-inflation-client/.env.development.local
+flow-inflation-client/.env.test.local
+flow-inflation-client/.env.production.local
+flow-inflation-client/.env*
 
-flow-flation-client/npm-debug.log*
-flow-flation-client/yarn-debug.log*
-flow-flation-client/yarn-error.log*
+flow-inflation-client/npm-debug.log*
+flow-inflation-client/yarn-debug.log*
+flow-inflation-client/yarn-error.log*
 
 *.pkey
 testnet-account.pkey
