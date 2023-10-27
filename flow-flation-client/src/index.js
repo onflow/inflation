@@ -20,9 +20,9 @@ const WALLET_CONNECT_PROJECT_ID =
 init({
   projectId: WALLET_CONNECT_PROJECT_ID,
   metadata: {
-    name: "Flation",
+    name: "Inflation",
     description: "The best Flow blockchain educational resource of all time.",
-    url: "https://flow-flation.vercel.app/",
+    url: "https://flow-inflation.vercel.app/",
     icons: ["https://cryptologos.cc/logos/flow-flow-logo.png"],
   },
   includeBaseWC: true,

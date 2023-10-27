@@ -1,6 +1,6 @@
-# Flation: Walletless PWA on Flow
+# Inflation: Walletless PWA on Flow
 
-Flation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
+Inflation is a demonstrative game designed for the Flow blockchain, highlighting the power of Progressive Web Apps (PWAs) and walletless interactions.
 
 [**Live Demo**](https://flation.vercel.app/): Visit and install it as a PWA shortcut on your mobile device.
 
@@ -261,9 +261,9 @@ This section guides you through setting up account linking and WalletConnect.
     init({
       projectId: WALLET_CONNECT_PROJECT_ID,
       metadata: {
-        name: "Flation",
+        name: "Inflation",
         description: "The best Flow blockchain educational resource of all time.",
-        url: "https://flow-flation.vercel.app/",
+        url: "https://flow-inflation.vercel.app/",
         icons: ["https://cryptologos.cc/logos/flow-flow-logo.png"],
       },
       includeBaseWC: true,
