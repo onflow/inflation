@@ -130,11 +130,15 @@ export default function Mint({ rgbColor, inflation, onReset }) {
           {minted ? (
             <Box mt={4}>
               <Typography>{message}</Typography>
-              <Button
-                label="View Your Balloons"
-                onClick={() => navigate("/my_balloons")}
-              />
-              <Button label="Play Again" onClick={onReset} />
+              <Box mt={4}>
+                <Button
+                  label="View Your Balloons"
+                  onClick={() => navigate("/my_balloons")}
+                />
+              </Box>
+              <Box mt={2}>
+                <Button label="Play Again" onClick={onReset} />
+              </Box>
             </Box>
           ) : (
             <>
