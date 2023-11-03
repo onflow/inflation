@@ -38,6 +38,13 @@
 				"type": "file",
 				"location": "testnet-account.pkey"
 			}
+		},
+		"mainnet-account": {
+			"address": "500f525ae1d02c5c",
+			"key": {
+				"type": "file",
+				"location": "mainnet-account.pkey"
+			}
 		}
 	},
 	"deployments": {
@@ -48,6 +55,11 @@
 		},
 		"testnet": {
 			"testnet-account": [
+				"BalloonSampleNFT"
+			]
+		},
+		"mainnet": {
+			"mainnet-account": [
 				"BalloonSampleNFT"
 			]
 		}

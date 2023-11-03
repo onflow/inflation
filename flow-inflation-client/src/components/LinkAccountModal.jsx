@@ -30,7 +30,7 @@ const style = {
 const getParentAccounts = async (childAccountAddress) => {
   const accounts = await fcl.query({
     cadence: `
-    import HybridCustody from 0x294e44e1ec6993c6
+    import HybridCustody from 0xd8a7e05a7ac670c0
 
     pub fun main(child: Address): [Address] {
         let acct = getAuthAccount(child)
@@ -80,7 +80,7 @@ function LinkAccountModal({ open, setOpen }) {
       setRemovingParents((prevParents) => [...prevParents, account]);
       var response = await fcl.send([
         fcl.transaction`
-        import HybridCustody from 0x294e44e1ec6993c6
+        import HybridCustody from 0xd8a7e05a7ac670c0
         
         transaction(parent: Address) {
             prepare(acct: AuthAccount) {
@@ -125,13 +125,13 @@ function LinkAccountModal({ open, setOpen }) {
         cadence: `
           #allowAccountLinking
   
-          import HybridCustody from 0x294e44e1ec6993c6
+          import HybridCustody from 0xd8a7e05a7ac670c0
           
-          import CapabilityFactory from 0x294e44e1ec6993c6
-          import CapabilityDelegator from 0x294e44e1ec6993c6
-          import CapabilityFilter from 0x294e44e1ec6993c6
+          import CapabilityFactory from 0xd8a7e05a7ac670c0
+          import CapabilityDelegator from 0xd8a7e05a7ac670c0
+          import CapabilityFilter from 0xd8a7e05a7ac670c0
           
-          import MetadataViews from 0x631e88ae7f1d7c20
+          import MetadataViews from 0x1d7e57aa55817448
           
           transaction(parentFilterAddress: Address?, childAccountFactoryAddress: Address, childAccountFilterAddress: Address) {
               prepare(childAcct: AuthAccount, parentAcct: AuthAccount) {
@@ -202,8 +202,8 @@ function LinkAccountModal({ open, setOpen }) {
         authorizations: [childAuthz, parentAuthz],
         args: (arg, t) => [
           arg(null, t.Optional(t.Address)),
-          arg("0x1055970ee34ef4dc", t.Address),
-          arg("0xe2664be06bb0fe62", t.Address),
+          arg("0xee9ff4f07a2d6dad", t.Address),
+          arg("0x78e93a79b05d0d7d", t.Address),
         ],
       });
       await fcl.tx(response).onceSealed();

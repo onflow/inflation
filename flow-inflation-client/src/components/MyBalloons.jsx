@@ -10,7 +10,7 @@ import * as fcl from "@onflow/fcl";
 const getNFTs = async (address) => {
   const items = await fcl.query({
     cadence: `
-        import BalloonSampleNFT from 0x66c97ae98630d4a2
+        import BalloonSampleNFT from 0x500f525ae1d02c5c
 
         pub struct NFT {
           pub let id: UInt64

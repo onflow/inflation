@@ -25,4 +25,5 @@ flow-inflation-client/yarn-error.log*
 
 *.pkey
 testnet-account.pkey
+mainnet-account.pkey
 

@@ -40,8 +40,8 @@ export default function Mint({ rgbColor, inflation, onReset }) {
       setLoading(true);
       var response = await fcl.send([
         fcl.transaction`
-                import NonFungibleToken from 0x631e88ae7f1d7c20
-                import BalloonSampleNFT from 0x66c97ae98630d4a2
+                import NonFungibleToken from 0x1d7e57aa55817448
+                import BalloonSampleNFT from 0x500f525ae1d02c5c
 
                 /// Mints a new BalloonSampleNFT into recipient's account
 
